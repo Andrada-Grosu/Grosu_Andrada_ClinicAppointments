@@ -1,20 +1,35 @@
-﻿namespace Grosu_Andrada_ClinicAppointments.Models
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+
+namespace Grosu_Andrada_ClinicAppointments.Models
 {
     public class Patient
     {
-        public int ID { get; set; }                // PK intern
-        public long PatientKaggleId { get; set; }  // PatientId din CSV
+        public int ID { get; set; }
 
-        public string Gender { get; set; }         // "F"/"M"
+        [Required]
+        [Display(Name = "Prenume")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Nume")]
+        public string LastName { get; set; }
+
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Phone]
+        [Display(Name = "Telefon")]
+        public string Phone { get; set; }
+
+        [Display(Name = "Gen")]
+        public string Gender { get; set; }
+
+        [Range(0, 120)]
+        [Display(Name = "Vârstă")]
         public int Age { get; set; }
-        public string Neighbourhood { get; set; }  // din CSV
-
-     
-        public bool Scholarship { get; set; }
-        public bool Hipertension { get; set; }
-        public bool Diabetes { get; set; }
-        public bool Alcoholism { get; set; }
-        public int Handicap { get; set; }
 
     
         public ICollection<Appointment>? Appointments { get; set; }

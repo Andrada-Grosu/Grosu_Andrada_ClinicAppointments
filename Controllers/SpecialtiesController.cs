@@ -20,9 +20,29 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         }
 
         // GET: Specialties
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            return View(await _context.Specialty.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var specialties = from s in _context.Specialty
+                              select s;
+
+            // Filtering
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                specialties = specialties.Where(s => s.Name.Contains(searchString));
+            }
+
+            // Sorting
+            specialties = sortOrder switch
+            {
+                "name_desc" => specialties.OrderByDescending(s => s.Name),
+                _ => specialties.OrderBy(s => s.Name),
+            };
+
+            return View(await specialties.ToListAsync());
         }
 
         // GET: Specialties/Details/5

@@ -20,11 +20,55 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         }
 
         // GET: Doctors
-        public async Task<IActionResult> Index()
+       
+            public async Task<IActionResult> Index(string sortOrder, string? searchName, string? searchSpecialty)
         {
-            var grosu_Andrada_ClinicAppointmentsContext = _context.Doctor.Include(d => d.Specialty);
-            return View(await grosu_Andrada_ClinicAppointmentsContext.ToListAsync());
+            // info pentru sortare
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            // info pentru filtre (le refolosim în view)
+            ViewData["CurrentName"] = searchName;
+            ViewData["CurrentSpecialty"] = searchSpecialty;
+
+            var doctors = _context.Doctor
+                .Include(d => d.Specialty)
+                .AsQueryable();
+
+            // 🔎 filtru după nume (prenume + nume)
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                var lowered = searchName.ToLower();
+                doctors = doctors.Where(d =>
+                    (d.FirstName + " " + d.LastName).ToLower().Contains(lowered));
+            }
+
+            // 🔎 filtru după specialitate (numele specializării)
+            if (!string.IsNullOrEmpty(searchSpecialty))
+            {
+                var loweredSpec = searchSpecialty.ToLower();
+                doctors = doctors.Where(d => d.Specialty.Name.ToLower().Contains(loweredSpec));
+            }
+
+            // 🔀 sortare după nume
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    doctors = doctors
+                        .OrderByDescending(d => d.LastName)
+                        .ThenByDescending(d => d.FirstName);
+                    break;
+
+                default:
+                    doctors = doctors
+                        .OrderBy(d => d.LastName)
+                        .ThenBy(d => d.FirstName);
+                    break;
+            }
+
+            return View(await doctors.ToListAsync());
         }
+        
 
         // GET: Doctors/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,7 +92,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         // GET: Doctors/Create
         public IActionResult Create()
         {
-            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "ID");
+            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "Name");
             return View();
         }
 
@@ -65,7 +109,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "ID", doctor.SpecialtyID);
+            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "Name", doctor.SpecialtyID);
             return View(doctor);
         }
 
@@ -82,7 +126,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
             {
                 return NotFound();
             }
-            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "ID", doctor.SpecialtyID);
+            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "Name", doctor.SpecialtyID);
             return View(doctor);
         }
 
@@ -118,7 +162,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "ID", doctor.SpecialtyID);
+            ViewData["SpecialtyID"] = new SelectList(_context.Specialty, "ID", "Name", doctor.SpecialtyID);
             return View(doctor);
         }
 

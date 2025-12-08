@@ -1,59 +1,76 @@
 ﻿@model IEnumerable<Grosu_Andrada_ClinicAppointments.Models.Doctor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Doctori";
+
+    string currentName = ViewData["CurrentName"] as string ?? "";
+    string currentSpecialty = ViewData["CurrentSpecialty"] as string ?? "";
+    string nameSortParm = ViewData["NameSortParm"] as string ?? "";
 }
 
-<h1>Index</h1>
+<h1>Doctori</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Adaugă doctor</a>
 </p>
-<table class="table">
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <input type="text"
+                   name="searchName"
+                   value="@currentName"
+                   class="form-control"
+                   placeholder="Caută după nume..." />
+        </div>
+
+        <div class="col-md-4">
+            <input type="text"
+                   name="searchSpecialty"
+                   value="@currentSpecialty"
+                   class="form-control"
+                   placeholder="Caută după specialitate..." />
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary me-2">Filtrează</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Resetează</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @* Nume complet – link sortare *@
+                <a asp-action="Index"
+                   asp-route-sortOrder="@nameSortParm"
+                   asp-route-searchName="@currentName"
+                   asp-route-searchSpecialty="@currentSpecialty">
+                    Nume complet
+                </a>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Specialty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
+            <th>Specialitate</th>
+            <th>Telefon</th>
+            <th>Email</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Specialty.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@($"{item.FirstName} {item.LastName}")</td>
+                <td>@item.Specialty?.Name</td>
+                <td>@item.Phone</td>
+                <td>@item.Email</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

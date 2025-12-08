@@ -11,16 +11,16 @@
         public int DoctorID { get; set; }
         public Doctor? Doctor { get; set; }
 
-        public DateTime ScheduledDate { get; set; }     // ScheduledDay
-        public DateTime AppointmentDate { get; set; }   // AppointmentDay
+        public DateTime ScheduledDate { get; set; }     
+        public DateTime AppointmentDate { get; set; }   
 
-        public bool SmsReceived { get; set; }           // SMS_received
-        public bool NoShow { get; set; }                // No-show (Yes/No)
+        public bool SmsReceived { get; set; }           
+        public bool NoShow { get; set; }                
 
        
         public float? NoShowRiskScore { get; set; }
 
-        public Payment? Payment { get; set; }           // 1–1
+        public Payment? Payment { get; set; }           
     }
 
 }

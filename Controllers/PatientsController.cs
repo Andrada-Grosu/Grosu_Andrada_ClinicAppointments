@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Grosu_Andrada_ClinicAppointments.Data;
+using Grosu_Andrada_ClinicAppointments.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Grosu_Andrada_ClinicAppointments.Data;
-using Grosu_Andrada_ClinicAppointments.Models;
 
 namespace Grosu_Andrada_ClinicAppointments.Controllers
 {
@@ -20,9 +21,63 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string? searchName, int? age, string? gender)
         {
-            return View(await _context.Patient.ToListAsync());
+            // pentru view (sortare curentă + parametrii de sortare pentru linkuri)
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+
+            // filtre curente (le refolosim în view)
+            ViewData["CurrentName"] = searchName;
+            ViewData["CurrentAge"] = age;
+            ViewData["CurrentGender"] = gender;
+
+            var patients = from p in _context.Patient
+                           select p;
+
+            // 🔎 filtrare după nume (prenume + nume)
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                var lowered = searchName.ToLower();
+                patients = patients.Where(p =>
+                    (p.FirstName + " " + p.LastName).ToLower().Contains(lowered));
+            }
+
+           
+
+            // filtrare după gen
+            if (!string.IsNullOrEmpty(gender))
+            {
+                patients = patients.Where(p => p.Gender == gender);
+            }
+
+            // sortare
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    patients = patients
+                        .OrderByDescending(p => p.LastName)
+                        .ThenByDescending(p => p.FirstName);
+                    break;
+
+                case "Age":
+                    patients = patients.OrderBy(p => p.Age);
+                    break;
+
+                case "age_desc":
+                    patients = patients.OrderByDescending(p => p.Age);
+                    break;
+
+                default:
+                    // sortare implicită: Nume A-Z
+                    patients = patients
+                        .OrderBy(p => p.LastName)
+                        .ThenBy(p => p.FirstName);
+                    break;
+            }
+
+            return View(await patients.ToListAsync());
         }
 
         // GET: Patients/Details/5
@@ -46,6 +101,12 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         // GET: Patients/Create
         public IActionResult Create()
         {
+            ViewData["GenderList"] = new SelectList(new[]
+     {
+        new { Value = "Male", Text = "Masculin" },
+        new { Value = "Female", Text = "Feminin" }
+    }, "Value", "Text");
+
             return View();
         }
 
@@ -54,7 +115,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,PatientKaggleId,Gender,Age,Neighbourhood,Scholarship,Hipertension,Diabetes,Alcoholism,Handicap")] Patient patient)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Email,Phone,Gender,Age")] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -69,15 +130,18 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var patient = await _context.Patient.FindAsync(id);
             if (patient == null)
-            {
                 return NotFound();
-            }
+
+            ViewData["GenderList"] = new SelectList(new[]
+            {
+        new { Value = "Male", Text = "Masculin" },
+        new { Value = "Female", Text = "Feminin" }
+    }, "Value", "Text", patient.Gender);
+
             return View(patient);
         }
 
@@ -86,7 +150,7 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,PatientKaggleId,Gender,Age,Neighbourhood,Scholarship,Hipertension,Diabetes,Alcoholism,Handicap")] Patient patient)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Email,Phone,Gender,Age")] Patient patient)
         {
             if (id != patient.ID)
             {

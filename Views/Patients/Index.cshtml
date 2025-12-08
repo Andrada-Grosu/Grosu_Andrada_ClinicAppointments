@@ -1,83 +1,114 @@
 ﻿@model IEnumerable<Grosu_Andrada_ClinicAppointments.Models.Patient>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pacienți";
+
+    string currentName = ViewData["CurrentName"] as string ?? "";
+    string currentGender = ViewData["CurrentGender"] as string ?? "";
+    int? currentAge = ViewData["CurrentAge"] as int?;
+    string nameSortParm = ViewData["NameSortParm"] as string ?? "";
+    string ageSortParm = ViewData["AgeSortParm"] as string ?? "Age";
 }
 
-<h1>Index</h1>
+<h1>Pacienți</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Adaugă pacient</a>
 </p>
-<table class="table">
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <input type="text"
+                   name="searchName"
+                   value="@currentName"
+                   class="form-control"
+                   placeholder="Caută după nume..." />
+        </div>
+
+        <div class="col-md-2">
+            <input type="number"
+                   name="age"
+                   value="@(currentAge?.ToString())"
+                   class="form-control"
+                   placeholder="Vârstă" />
+        </div>
+
+        <div class="col-md-3">
+            <select name="gender" class="form-control">
+                <option value="">Toate genurile</option>
+
+                @if (currentGender == "Male")
+                {
+                    <option value="Male" selected>Masculin</option>
+                }
+                else
+                {
+                    <option value="Male">Masculin</option>
+                }
+
+                @if (currentGender == "Female")
+                {
+                    <option value="Female" selected>Feminin</option>
+                }
+                else
+                {
+                    <option value="Female">Feminin</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary me-2">Filtrează</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Resetează</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PatientKaggleId)
+                @* Nume complet – link de sortare *@
+                <a asp-action="Index"
+                   asp-route-sortOrder="@nameSortParm"
+                   asp-route-searchName="@currentName"
+                   asp-route-age="@(currentAge?.ToString())"
+                   asp-route-gender="@currentGender">
+                    Nume complet
+                </a>
             </th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Gen</th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Neighbourhood)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scholarship)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hipertension)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Diabetes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Alcoholism)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Handicap)
+                @* Vârstă – link de sortare *@
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ageSortParm"
+                   asp-route-searchName="@currentName"
+                   asp-route-age="@(currentAge?.ToString())"
+                   asp-route-gender="@currentGender">
+                    Vârstă
+                </a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatientKaggleId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Neighbourhood)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Scholarship)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hipertension)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diabetes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Alcoholism)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Handicap)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@($"{item.FirstName} {item.LastName}")</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td>@item.Gender</td>
+                <td>@item.Age</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
