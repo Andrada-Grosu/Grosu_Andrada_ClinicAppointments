@@ -1,66 +1,63 @@
 ﻿@model Grosu_Andrada_ClinicAppointments.Models.Appointment
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Creează programare";
 }
 
-<h1>Create</h1>
-
-<h4>Appointment</h4>
+<h1>Creează programare</h1>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AppointmentKaggleId" class="control-label"></label>
-                <input asp-for="AppointmentKaggleId" class="form-control" />
-                <span asp-validation-for="AppointmentKaggleId" class="text-danger"></span>
+
+            <div class="form-group mb-3">
+                <label asp-for="PatientID" class="control-label">Pacient</label>
+                <select asp-for="PatientID" class="form-control"
+                        asp-items="ViewBag.PatientID">
+                    <option value="">Selectează pacient...</option>
+                </select>
+                <span asp-validation-for="PatientID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PatientID" class="control-label"></label>
-                <select asp-for="PatientID" class ="form-control" asp-items="ViewBag.PatientID"></select>
+
+            <div class="form-group mb-3">
+                <label asp-for="DoctorID" class="control-label">Doctor</label>
+                <select asp-for="DoctorID" class="form-control"
+                        asp-items="ViewBag.DoctorID">
+                    <option value="">Selectează doctor...</option>
+                </select>
+                <span asp-validation-for="DoctorID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DoctorID" class="control-label"></label>
-                <select asp-for="DoctorID" class ="form-control" asp-items="ViewBag.DoctorID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ScheduledDate" class="control-label"></label>
-                <input asp-for="ScheduledDate" class="form-control" />
-                <span asp-validation-for="ScheduledDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AppointmentDate" class="control-label"></label>
-                <input asp-for="AppointmentDate" class="form-control" />
+
+            <div class="form-group mb-3">
+                <label asp-for="AppointmentDate" class="control-label">Data și ora</label>
+                <input asp-for="AppointmentDate" class="form-control" type="datetime-local" />
                 <span asp-validation-for="AppointmentDate" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SmsReceived" /> @Html.DisplayNameFor(model => model.SmsReceived)
-                </label>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Metodă de plată</label>
+                <select name="paymentMethod" class="form-control"
+                        asp-items="ViewBag.PaymentMethods">
+                    <option value="">Selectează metoda...</option>
+                </select>
+                <span class="text-danger">
+                    @Html.ValidationMessage("paymentMethod")
+                </span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="NoShow" /> @Html.DisplayNameFor(model => model.NoShow)
-                </label>
-            </div>
+
+
             <div class="form-group">
-                <label asp-for="NoShowRiskScore" class="control-label"></label>
-                <input asp-for="NoShowRiskScore" class="form-control" />
-                <span asp-validation-for="NoShowRiskScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Salvează" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Înapoi la listă</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,10 +1,10 @@
 ﻿@model Grosu_Andrada_ClinicAppointments.Models.Payment
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Creează plată";
 }
 
-<h1>Create</h1>
+<h1>Creează plată</h1>
 
 <h4>Payment</h4>
 <hr />
@@ -12,30 +12,37 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AppointmentID" class="control-label"></label>
-                <select asp-for="AppointmentID" class ="form-control" asp-items="ViewBag.AppointmentID"></select>
+
+            <!-- Programare -->
+            <div class="form-group mb-3">
+                <label asp-for="AppointmentID" class="control-label">Programare</label>
+                <select asp-for="AppointmentID" class="form-control" asp-items="ViewBag.AppointmentID">
+                    <option value="">Selectează programarea...</option>
+                </select>
+                <span asp-validation-for="AppointmentID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label"></label>
-                <input asp-for="PaymentDate" class="form-control" />
+
+            <!-- Data plății -->
+            <div class="form-group mb-3">
+                <label asp-for="PaymentDate" class="control-label">Data plății</label>
+                <input asp-for="PaymentDate" class="form-control" type="datetime-local" />
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PaymentMethod" class="control-label"></label>
-                <input asp-for="PaymentMethod" class="form-control" />
+
+            <!-- Metoda de plată -->
+            <div class="form-group mb-3">
+                <label asp-for="PaymentMethod" class="control-label">Metodă de plată</label>
+                <select asp-for="PaymentMethod" class="form-control">
+                    <option value="">Selectează metoda...</option>
+                    <option>Cash la clinică</option>
+                    <option>Card la clinică</option>
+                    <option>Online acum</option>
+                </select>
                 <span asp-validation-for="PaymentMethod" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PaymentStatus" class="control-label"></label>
-                <input asp-for="PaymentStatus" class="form-control" />
-                <span asp-validation-for="PaymentStatus" class="text-danger"></span>
-            </div>
+
+          
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -48,5 +55,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

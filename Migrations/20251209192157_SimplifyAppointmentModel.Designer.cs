@@ -4,6 +4,7 @@ using Grosu_Andrada_ClinicAppointments.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grosu_Andrada_ClinicAppointments.Migrations
 {
     [DbContext(typeof(Grosu_Andrada_ClinicAppointmentsContext))]
-    partial class Grosu_Andrada_ClinicAppointmentsContextModelSnapshot : ModelSnapshot
+    [Migration("20251209192157_SimplifyAppointmentModel")]
+    partial class SimplifyAppointmentModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +128,7 @@ namespace Grosu_Andrada_ClinicAppointments.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("AppointmentID")
                         .HasColumnType("int");
@@ -138,6 +141,7 @@ namespace Grosu_Andrada_ClinicAppointments.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

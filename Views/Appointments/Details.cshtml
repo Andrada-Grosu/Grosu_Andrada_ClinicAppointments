@@ -1,66 +1,30 @@
 ﻿@model Grosu_Andrada_ClinicAppointments.Models.Appointment
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalii programare";
 }
 
-<h1>Details</h1>
+<h1>Detalii programare</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">Pacient</dt>
+    <dd class="col-sm-10">
+        @(Model.Patient != null ? Model.Patient.FirstName + " " + Model.Patient.LastName : "")
+    </dd>
+
+    <dt class="col-sm-2">Doctor</dt>
+    <dd class="col-sm-10">
+        @(Model.Doctor != null ? Model.Doctor.FirstName + " " + Model.Doctor.LastName : "")
+    </dd>
+
+    <dt class="col-sm-2">Data și ora</dt>
+    <dd class="col-sm-10">
+        @Model.AppointmentDate.ToString("dd.MM.yyyy HH:mm")
+    </dd>
+</dl>
 
 <div>
-    <h4>Appointment</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppointmentKaggleId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppointmentKaggleId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Patient)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Patient.ID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Doctor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Doctor.ID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ScheduledDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ScheduledDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppointmentDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppointmentDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SmsReceived)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SmsReceived)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NoShow)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NoShow)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NoShowRiskScore)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NoShowRiskScore)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary">Editează</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Înapoi la listă</a>
 </div>

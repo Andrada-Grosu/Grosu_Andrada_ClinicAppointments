@@ -4,6 +4,7 @@ using Grosu_Andrada_ClinicAppointments.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grosu_Andrada_ClinicAppointments.Migrations
 {
     [DbContext(typeof(Grosu_Andrada_ClinicAppointmentsContext))]
-    partial class Grosu_Andrada_ClinicAppointmentsContextModelSnapshot : ModelSnapshot
+    [Migration("20251209213432_updatePaymentModel")]
+    partial class updatePaymentModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
