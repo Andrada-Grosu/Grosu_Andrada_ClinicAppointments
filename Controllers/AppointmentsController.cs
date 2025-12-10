@@ -1,21 +1,28 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using Grosu_Andrada_ClinicAppointments.Data;
+using Grosu_Andrada_ClinicAppointments.Models;
+using Grosu_Andrada_ClinicAppointments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Grosu_Andrada_ClinicAppointments.Data;
-using Grosu_Andrada_ClinicAppointments.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Grosu_Andrada_ClinicAppointments.Controllers
 {
     public class AppointmentsController : Controller
     {
+        private readonly INoShowPredictionService _predictionService;
         private readonly Grosu_Andrada_ClinicAppointmentsContext _context;
 
-        public AppointmentsController(Grosu_Andrada_ClinicAppointmentsContext context)
+        public AppointmentsController(
+      INoShowPredictionService predictionService,
+      Grosu_Andrada_ClinicAppointmentsContext context)
         {
+            _predictionService = predictionService;
             _context = context;
         }
+
+        
 
         // GET: Appointments
         public async Task<IActionResult> Index()
@@ -42,11 +49,11 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
             return View(appointment);
         }
 
-        // ✅ GET: Appointments/Create
+        // GET: Appointments/Create
         [HttpGet]
         public IActionResult Create()
         {
-            LoadDropdowns();   
+            LoadDropdowns();
 
             ViewBag.PaymentMethods = new SelectList(new[]
             {
@@ -58,14 +65,13 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
             return View();
         }
 
-        // ✅ POST: Appointments/Create
+        // POST: Appointments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             [Bind("PatientID,DoctorID,AppointmentDate")] Appointment appointment,
             string paymentMethod)
         {
-            // verificăm dacă doctorul e deja ocupat la acea dată & oră
             bool alreadyBooked = await _context.Appointment.AnyAsync(a =>
                 a.DoctorID == appointment.DoctorID &&
                 a.AppointmentDate == appointment.AppointmentDate);
@@ -83,32 +89,21 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
 
             if (ModelState.IsValid)
             {
-                // 1. salvăm programarea
                 _context.Add(appointment);
                 await _context.SaveChangesAsync();
 
-                // 2. calculăm data plății
-                DateTime paymentDate = paymentMethod == "Online acum"
-                    ? DateTime.Now
-                    : appointment.AppointmentDate;
-
-                // 3. creăm Payment legat de programare
                 var payment = new Payment
                 {
                     AppointmentID = appointment.ID,
                     PaymentMethod = paymentMethod,
-
                     PaymentDate = paymentMethod == "Online acum"
-         ? DateTime.Now
-         : appointment.AppointmentDate,
-
+                        ? DateTime.Now
+                        : appointment.AppointmentDate,
                     Amount = 0m,
-
                     PaymentStatus = paymentMethod == "Online acum"
-         ? "Paid"
-         : "Pending"
+                        ? "Paid"
+                        : "Pending"
                 };
-
 
                 _context.Payment.Add(payment);
                 await _context.SaveChangesAsync();
@@ -116,7 +111,6 @@ namespace Grosu_Andrada_ClinicAppointments.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // dacă sunt erori de validare, refacem dropdown-urile + metodele de plată
             LoadDropdowns(appointment.PatientID, appointment.DoctorID);
             ViewBag.PaymentMethods = new SelectList(new[]
             {

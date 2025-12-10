@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../NoShowClasificationWebApi/NoShowClasificationWebApi.csproj" />
   <Project Path="Grosu_Andrada_ClinicAppointments.csproj" />
 </Solution>

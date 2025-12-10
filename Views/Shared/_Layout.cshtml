@@ -3,15 +3,114 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Grosu_Andrada_ClinicAppointments</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - ClinicAppointments</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Grosu_Andrada_ClinicAppointments.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Definirea culorilor și a fontului */
+        :root {
+            --primary-color: #007bff; /* Albastru principal */
+            --secondary-color: #6c757d;
+            --navbar-bg: #004d99; /* Albastru închis pentru navbar */
+            --navbar-text: #ffffff;
+            --content-bg: #ffffff; /* Fundalul secțiunilor principale */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            /* Setarea imaginii de fundal */
+            background-image: url('http://googleusercontent.com/image_generation_content/0');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Imaginea rămâne fixă la scroll */
+            background-position: center center;
+            position: relative; /* Necesar pentru overlay */
+            min-height: 100vh;
+        }
+
+            /* OVERLAY - Adaugă o mască semi-transparentă peste imaginea de fundal */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.75); /* Alb semi-transparent (75% opacitate) */
+                z-index: -1; /* Plasează sub conținut */
+            }
+
+        /* Stil pentru Header (Navbar) - Rămâne opac peste fundal */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            border-bottom: 5px solid var(--primary-color) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: var(--navbar-text) !important;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+            .navbar-brand::before {
+                content: '🏥'; /* Iconiță clinică */
+                margin-right: 10px;
+                font-size: 1.2em;
+                color: #ffc107;
+            }
+
+        .nav-link {
+            color: var(--navbar-text) !important;
+            font-weight: 400;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+
+            .nav-link:hover {
+                color: #fff !important;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+        /* Stil pentru secțiunea principală (Main) */
+        .container main {
+            padding: 30px;
+            background-color: var(--content-bg); /* Fundal alb opac pentru citibilitate */
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); /* Umbră mai pronunțată */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Stil pentru Footer */
+        .footer {
+            background-color: #e9ecef; /* Fundal gri deschis */
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            border-top: 1px solid #ddd;
+        }
+
+            .footer a {
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     ClinicAppointments
@@ -24,27 +123,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Acasă</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Acasă</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Patients" asp-action="Index">Pacienți</a>
+                            <a class="nav-link" asp-controller="Patients" asp-action="Index">Pacienți</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Doctors" asp-action="Index">Doctori</a>
+                            <a class="nav-link" asp-controller="Doctors" asp-action="Index">Doctori</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Specialties" asp-action="Index">Specializări</a>
+                            <a class="nav-link" asp-controller="Specialties" asp-action="Index">Specializări</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Appointments" asp-action="Index">Programări</a>
+                            <a class="nav-link" asp-controller="Appointments" asp-action="Index">Programări</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Payments" asp-action="Index">Plăți</a>
+                            <a class="nav-link" asp-controller="Payments" asp-action="Index">Plăți</a>
                         </li>
                     </ul>
                 </div>
@@ -60,7 +154,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Grosu_Andrada_ClinicAppointments - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - ClinicAppointments - <a asp-area="" asp-controller="Home" asp-action="Privacy">Politica de Confidențialitate</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

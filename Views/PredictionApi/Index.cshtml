@@ -1,0 +1,53 @@
+﻿@model Grosu_Andrada_ClinicAppointments.Models.NoShowPredictionViewModel
+
+@{
+    ViewData["Title"] = "Predicție No-show pacient";
+}
+
+<h2 class="mb-4">Predicție No-show pacient</h2>
+
+@if (Model.PatientId.HasValue)
+{
+    <p class="alert alert-primary">
+        Se calculează riscul de neprezentare (No-show) pentru Pacientul ID: **@Model.PatientId**.
+    </p>
+}
+
+<form asp-action="Index" method="post">
+    @if (Model.PatientId.HasValue)
+    {
+        <input type="hidden" asp-for="PatientId" />
+    }
+
+    <form asp-action="Index" method="post">
+        @if (Model.PatientId.HasValue)
+        {
+            <input type="hidden" asp-for="PatientId" />
+        }
+    </form>
+
+    <div class="form-group mb-3">
+        <label asp-for="Gender">Gender</label>
+        <select asp-for="Gender" class="form-control" required>
+            <option value="">-- Selectează genul --</option>
+            <option value="Female">Female</option>
+            <option value="Masculin">Masculin</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="AppointmentDay">AppointmentDay</label>
+        <input type="date" asp-for="AppointmentDay" class="form-control" required />
+        <span asp-validation-for="AppointmentDay" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-4">
+        <label asp-for="Age">Age</label>
+        <input type="number" asp-for="Age" class="form-control" min="0" required />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Calculează predicția</button>
+</form>
+

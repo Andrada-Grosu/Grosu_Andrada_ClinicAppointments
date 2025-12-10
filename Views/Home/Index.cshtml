@@ -1,8 +1,106 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Acasă";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .welcome-card {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #e9f7fe 0%, #ffffff 100%);
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+    }
+
+        .welcome-card h1 {
+            color: #004d99; /* Albastru închis */
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-card p {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+
+    .feature-box {
+        padding: 20px;
+        border-left: 3px solid var(--primary-color);
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+        background-color: #fcfcfc;
+        border-radius: 6px;
+    }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+        }
+
+    .welcome-card {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #e9f7fe 0%, #ffffff 100%);
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <div class="welcome-card">
+            <h1>Bun venit la ClinicAppointments!</h1>
+            <p class="lead">
+                Sistemul dumneavoastră simplu și rapid de gestionare a programărilor medicale, a pacienților și a plăților.
+                Suntem dedicați să vă oferim cea mai bună experiență de administrare.
+            </p>
+
+            <a href="https://localhost:7282/PredictionApi/Index" class="btn btn-info btn-lg">
+                <i class="bi bi-robot"></i> Instrument de Predicție (API)
+            </a>
+
+            <a asp-controller="Appointments" asp-action="Index" class="btn btn-primary btn-lg ml-2">
+                <i class="bi bi-calendar-check"></i> Vezi Programările
+            </a>
+            <a asp-controller="Patients" asp-action="Index" class="btn btn-outline-secondary btn-lg ml-2">
+                <i class="bi bi-people"></i> Gestionare Pacienți
+            </a>
+        </div>
+    </div>
 </div>
+
+<div class="row">
+    <h2 class="text-center mb-4" style="color: #004d99; width: 100%; font-weight: 600;">De ce să ne folosiți?</h2>
+
+    <div class="col-md-4 mb-4">
+        <div class="feature-box">
+            <div class="feature-icon">📅</div>
+            <h3>Programare Simplificată</h3>
+            <p>Vizualizați și gestionați rapid toate programările pe zile, doctori și specializări. Nu pierdeți niciodată o programare!</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="feature-box">
+            <div class="feature-icon">👨‍⚕️</div>
+            <h3>Administrare Personal</h3>
+            <p>Acces facil la lista completă de doctori, pacienți și specializările disponibile în cadrul clinicii.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="feature-box">
+            <div class="feature-icon">💰</div>
+            <h3>Urmărirea Plăților</h3>
+            <p>Înregistrați și monitorizați plățile aferente fiecărei consultații, asigurând o evidență financiară clară și transparentă.</p>
+        </div>
+    </div>
+
+  </div>
