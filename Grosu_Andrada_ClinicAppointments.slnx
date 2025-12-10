@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../GrpcNoShowService/GrpcPatientService.csproj" Id="1aac8a9c-6f25-4788-8c43-a84fc73c7bf2" />
   <Project Path="../NoShowClasificationWebApi/NoShowClasificationWebApi.csproj" />
   <Project Path="Grosu_Andrada_ClinicAppointments.csproj" />
 </Solution>
